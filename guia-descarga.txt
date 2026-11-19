@@ -1,0 +1,2 @@
+Guia de prueba - Leonardo Sinfuentes
+Archivo de ejemplo para medir el evento de descarga en Google Analytics 4.
