@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda de prueba | Leonardo Sinfuentes</title>
+
+<!-- Google tag (gtag.js) — ID de medición: G-H92GYC1REB -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H92GYC1REB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-H92GYC1REB', { debug_mode: true });
+</script>
+
+<style>
+  body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; color: #222; }
+  h1 { margin-bottom: 4px; }
+  .sub { color: #666; margin-top: 0; }
+  section { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0; }
+  .btn { display: inline-block; padding: 12px 20px; border-radius: 6px; text-decoration: none; color: #fff; font-weight: bold; }
+  .descarga { background: #1a73e8; }
+  .compra { background: #188038; }
+  footer { color: #888; font-size: 13px; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<h1>Tienda de prueba</h1>
+<p class="sub">Sitio para la práctica de Google Analytics 4 · Leonardo Sinfuentes</p>
+
+<section>
+  <h2>1. Descarga nuestra guía</h2>
+  <p>Evento medido: <code>clic_descarga</code> (además del evento automático <code>file_download</code>).</p>
+  <a class="btn descarga" id="btn-descarga" href="guia-descarga.txt" download>Descargar guía</a>
+</section>
+
+<section>
+  <h2>2. Mira el video</h2>
+  <p>Eventos medidos: <code>video_reproducido</code> y <code>video_completado</code>.</p>
+  <div id="player"></div>
+</section>
+
+<section>
+  <h2>3. Simula una compra</h2>
+  <p>Al terminar, llegas a <code>/gracias.html</code> (evento clave por destino).</p>
+  <a class="btn compra" href="gracias.html">Comprar ahora</a>
+</section>
+
+<footer>Práctica de Comercio Internacional · Leonardo Sinfuentes</footer>
+
+<script>
+  // Evento personalizado: clic en el botón de descarga
+  document.getElementById('btn-descarga').addEventListener('click', function () {
+    gtag('event', 'clic_descarga', {
+      file_name: 'guia-descarga.txt',
+      link_text: 'Descargar guía'
+    });
+  });
+
+  // Seguimiento de video con la API de YouTube
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+
+  var player, yaInicio = false;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '360', width: '640',
+      videoId: 'M7lc1UVf-VE',
+      playerVars: { enablejsapi: 1 },
+      events: { onStateChange: onCambioEstado }
+    });
+  }
+  function onCambioEstado(e) {
+    var titulo = player.getVideoData().title;
+    if (e.data === YT.PlayerState.PLAYING && !yaInicio) {
+      yaInicio = true;
+      gtag('event', 'video_reproducido', { video_title: titulo });
+    }
+    if (e.data === YT.PlayerState.ENDED) {
+      gtag('event', 'video_completado', { video_title: titulo });
+      yaInicio = false;
+    }
+  }
+</script>
+</body>
+</html>
